@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
    The toRecord() / fromRecord() helpers below translate between them.
    ════════════════════════════════════════════════════════════ */
 
-const SUPABASE_URL      = 'https://bvwndtboqgybhcvzhfln.supabase.co/rest/v1/workouts';   // ← replace
+const SUPABASE_URL      = 'https://bvwndtboqgybhcvzhfln.supabase.co';   // ← replace
 const SUPABASE_ANON_KEY = 'sb_publishable_PlPqkfU7J2HvGJsmEqHiGg_QGhGsEzl';                    // ← replace
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

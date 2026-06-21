@@ -58,15 +58,110 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /* ════════════════════════════════════════════════════════════
-   STORAGE
+   SUPABASE CLIENT
+   ─────────────────────────────────────────────────────────────
+   SETUP (one-time, ~5 minutes):
+
+   1. Create a free account at https://supabase.com
+   2. Create a new project (pick any region, remember your DB password)
+   3. In the Supabase dashboard go to Table Editor → New Table:
+        Name:  workouts
+        Columns (add each one):
+          id               bigint        primary key, default: gen_random_uuid() — actually use int8 identity
+          created_at       timestamptz   default: now()
+          date             text          not null
+          body_part        text          not null
+          phase            int4          not null
+          sets             int4          not null
+          duration_seconds int4          not null
+          exercises        jsonb         not null   ← stores the array of exercise names
+      Leave RLS off for now (you can enable it later when you add auth)
+   4. Go to Project Settings → API:
+        Copy "Project URL"  → paste as SUPABASE_URL below
+        Copy "anon public"  → paste as SUPABASE_ANON_KEY below
+   5. Save and refresh the page — history now reads/writes from Postgres
+
+   COLUMN NAME NOTE:
+   Supabase uses snake_case. The JS objects in this file use camelCase.
+   The toRecord() / fromRecord() helpers below translate between them.
    ════════════════════════════════════════════════════════════ */
-function getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch { return []; }
+
+const SUPABASE_URL      = 'https://bvwndtboqgybhcvzhfln.supabase.co/rest/v1/';   // ← replace
+const SUPABASE_ANON_KEY = 'sb_publishable_PlPqkfU7J2HvGJsmEqHiGg_QGhGsEzl';                    // ← replace
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* Translate a JS workout object → Supabase row */
+function toRecord(w) {
+  return {
+    date:             w.date,
+    body_part:        w.bodyPart,
+    phase:            w.phase,
+    sets:             w.sets,
+    duration_seconds: w.durationSeconds,
+    exercises:        w.exercises,   // jsonb accepts a JS array directly
+  };
 }
-function saveHistory(h) { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); }
+
+/* Translate a Supabase row → JS workout object */
+function fromRecord(row) {
+  return {
+    id:              row.id,
+    date:            row.date,
+    bodyPart:        row.body_part,
+    phase:           row.phase,
+    sets:            row.sets,
+    durationSeconds: row.duration_seconds,
+    exercises:       row.exercises,  // already parsed from jsonb
+  };
+}
+
+/* ── Core storage functions ─────────────────────────────────
+   All three are async — everything that calls them uses await.
+   ─────────────────────────────────────────────────────────── */
+
+async function getHistory() {
+  const { data, error } = await db
+    .from('workouts')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('getHistory error:', error.message);
+    return [];
+  }
+  return (data || []).map(fromRecord);
+}
+
+async function saveWorkout(record) {
+  const { error } = await db
+    .from('workouts')
+    .insert(toRecord(record));
+
+  if (error) {
+    console.error('saveWorkout error:', error.message);
+    showToast('⚠️ Could not save workout');
+    return false;
+  }
+  return true;
+}
+
+async function deleteWorkoutById(id) {
+  const { error } = await db
+    .from('workouts')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('deleteWorkout error:', error.message);
+    showToast('⚠️ Could not delete workout');
+    return false;
+  }
+  return true;
+}
 
 /* ════════════════════════════════════════════════════════════
-   WEEK HELPERS
+   WEEK HELPERS  (all async because getHistory is async)
    ════════════════════════════════════════════════════════════ */
 function getStartOfWeek(date) {
   const d = new Date(date);
@@ -74,20 +169,20 @@ function getStartOfWeek(date) {
   d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
   return d;
 }
-function getWorkoutsInWeek(ws) {
+async function getWorkoutsInWeek(ws) {
   const we = new Date(ws); we.setDate(ws.getDate() + 7);
-  return getHistory().filter(w => { const d=new Date(w.date); return d>=ws && d<we; });
+  const all = await getHistory();
+  return all.filter(w => { const d=new Date(w.date); return d>=ws && d<we; });
 }
-function getCurrentWeekWorkouts() { return getWorkoutsInWeek(getStartOfWeek(new Date())); }
-function getPartsThisWeek()       { return getCurrentWeekWorkouts().map(w => w.bodyPart); }
+async function getCurrentWeekWorkouts() { return getWorkoutsInWeek(getStartOfWeek(new Date())); }
+async function getPartsThisWeek()       { return (await getCurrentWeekWorkouts()).map(w => w.bodyPart); }
 
 /* ════════════════════════════════════════════════════════════
    WEEK STRIP
    ════════════════════════════════════════════════════════════ */
-function renderWeekStrip() {
+async function renderWeekStrip() {
   const strip = document.getElementById('week-strip');
-  const done  = getPartsThisWeek();
-  const ww    = getCurrentWeekWorkouts();
+  const ww    = await getCurrentWeekWorkouts();
   strip.innerHTML = BODY_PARTS.map(part => {
     const isDone = done.includes(part);
     const count  = ww.filter(w => w.bodyPart === part).length;
@@ -374,8 +469,8 @@ function skipRest() { restRemaining = 0; finishRest(); }
 /* ════════════════════════════════════════════════════════════
    CELEBRATION OVERLAY
    ════════════════════════════════════════════════════════════ */
-function showCelebration(onDone) {
-  const unique = [...new Set(getPartsThisWeek())];
+async function showCelebration(onDone) {
+  const unique = [...new Set(await getPartsThisWeek())];
   document.getElementById('celebration-sub').textContent =
     unique.length >= 4
       ? 'Full week done — all 4 body parts. You showed up every time.'
@@ -407,16 +502,15 @@ function showCelebration(onDone) {
 /* ════════════════════════════════════════════════════════════
    FINISH WORKOUT  (called after celebration)
    ════════════════════════════════════════════════════════════ */
-function finishWorkout() {
+async function finishWorkout() {
   const record = {
-    id: Date.now(), date: new Date().toISOString(),
+    date: new Date().toISOString(),
     bodyPart: selectedBodyPart, phase: selectedPhase,
     sets: selectedSets, exercises: selectedExercises.map(e=>e.name),
     durationSeconds: workoutSeconds,
   };
-  const history = getHistory();
-  history.unshift(record);
-  saveHistory(history);
+
+  const saved = await saveWorkout(record);
 
   const m = Math.floor(workoutSeconds/60);
   const s = (workoutSeconds%60).toString().padStart(2,'0');
@@ -424,14 +518,14 @@ function finishWorkout() {
   document.getElementById('stat-exercises').textContent = selectedExercises.length;
   document.getElementById('stat-sets').textContent      = selectedSets;
 
-  const unique = [...new Set(getPartsThisWeek())];
+  const unique = [...new Set(await getPartsThisWeek())];
   document.getElementById('complete-sub').textContent = unique.length>=4
     ? 'Full week locked in — all 4 body parts done!'
     : `${unique.length} of 4 body parts done this week. Keep going!`;
 
   showPanel('complete');
-  renderWeekStrip();
-  showToast(`${selectedBodyPart} session saved ✓`);
+  await renderWeekStrip();
+  showToast(saved ? `${selectedBodyPart} session saved ✓` : '⚠️ Session not saved — check connection');
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -477,19 +571,22 @@ function hideOverlay(id) { document.getElementById(id).style.display = 'none'; }
 /* ════════════════════════════════════════════════════════════
    HISTORY VIEW
    ════════════════════════════════════════════════════════════ */
-function renderHistory() {
-  const now = new Date();
-  const tgt = new Date(now); tgt.setDate(now.getDate() + historyWeekOffset*7);
-  const ws  = getStartOfWeek(tgt);
-  const we  = new Date(ws); we.setDate(ws.getDate()+7);
-  const fmt = d => d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+async function renderHistory() {
+  const now  = new Date();
+  const tgt  = new Date(now); tgt.setDate(now.getDate() + historyWeekOffset*7);
+  const ws   = getStartOfWeek(tgt);
+  const we   = new Date(ws); we.setDate(ws.getDate()+7);
+  const fmt  = d => d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const list = document.getElementById('history-list');
 
   document.getElementById('history-week-label').textContent = historyWeekOffset===0
     ? `This Week (${fmt(ws)} – ${fmt(new Date(we-86400000))})`
     : `${fmt(ws)} – ${fmt(new Date(we-86400000))}`;
 
-  const ww   = getWorkoutsInWeek(ws);
-  const list = document.getElementById('history-list');
+  // Show loading state while fetching
+  list.innerHTML = `<div class="empty-state"><div class="empty-text" style="opacity:0.5">Loading…</div></div>`;
+
+  const ww = await getWorkoutsInWeek(ws);
 
   if (!ww.length) {
     list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No workouts logged this week.</div></div>`;
@@ -523,13 +620,14 @@ function renderHistory() {
   }).join('');
 }
 
-function deleteWorkout(id) {
+async function deleteWorkout(id) {
   if (!confirm('Delete this workout from your history?')) return;
-  const history = getHistory().filter(w => w.id !== id);
-  saveHistory(history);
-  renderHistory();
-  renderWeekStrip();
-  showToast('Workout deleted');
+  const ok = await deleteWorkoutById(id);
+  if (ok) {
+    await renderHistory();
+    await renderWeekStrip();
+    showToast('Workout deleted');
+  }
 }
 
 function changeWeekOffset(delta) {
@@ -545,7 +643,7 @@ function showView(view) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById(`view-${view}`).classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(t => { if(t.dataset.view===view) t.classList.add('active'); });
-  if (view==='history') renderHistory();
+  if (view==='history') renderHistory();  // renderHistory is async but fire-and-forget here is fine
 }
 
 /* ════════════════════════════════════════════════════════════

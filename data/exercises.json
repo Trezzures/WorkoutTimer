@@ -1,0 +1,138 @@
+{
+  "Arms/Chest": {
+    "1": [
+      { "name": "Kneeling Push-Ups", "tip": "<strong>Reduce load, build form.</strong> Keep a straight line from knees to shoulders. Core stays tight throughout." },
+      { "name": "Chair Dips", "tip": "<strong>Use a sturdy chair.</strong> Feet closer to you = easier. Lower slowly, push up strong." },
+      { "name": "Bicep Curls (Backpack)", "tip": "<strong>Fill a backpack with books.</strong> Keep elbows pinned at sides. Full range of motion." },
+      { "name": "Incline Push-Ups", "tip": "<strong>Hands on a counter or couch.</strong> The higher the surface, the easier. Still keep core tight." },
+      { "name": "Resistance Band Curls", "tip": "Stand on the band, curl both arms up simultaneously. Controlled on the way down." }
+    ],
+    "2": [
+      { "name": "Standard Push-Ups", "tip": "Full plank position. Lower until chest nearly touches floor. Don't let hips sag or pike up." },
+      { "name": "Close-Grip Push-Ups", "tip": "<strong>Triceps emphasis.</strong> Hands shoulder-width or closer. Elbows track along your sides." },
+      { "name": "Kettlebell Floor Press", "tip": "Lie on your back. Press one or both KBs straight up. Control the descent." },
+      { "name": "Decline Push-Ups", "tip": "<strong>Feet elevated on a chair.</strong> More upper chest and shoulders. Keep body rigid." },
+      { "name": "Feet-Elevated Dips", "tip": "Chair behind you, feet on another chair. Lower slowly, push explosively." },
+      { "name": "Diamond Push-Ups", "tip": "Form a diamond shape with thumbs and index fingers. Intense tricep focus." },
+      { "name": "Pike Push-Ups", "tip": "Hips high in an upside-down V. Bend elbows and lower head toward the floor. Shoulder builder." },
+      { "name": "Kettlebell Shoulder Press", "tip": "Standing or seated. Press overhead, lock out at top. Control the lowering phase." },
+      { "name": "Chin-Ups", "tip": "Palms facing you. Bicep-dominant pull. Aim for full hang to chin-above-bar." },
+      { "name": "KB Tricep Extensions", "tip": "Hold KB overhead with both hands. Lower behind head slowly, extend back up." }
+    ],
+    "3": [
+      { "name": "Explosive Push-Ups / Clap Push-Ups", "tip": "Push hard enough to leave the ground. Land softly with slightly bent elbows. Builds power." },
+      { "name": "Archer Push-Ups", "tip": "Wide stance, shift weight to one arm as you lower. The other arm stays extended. Alternating." },
+      { "name": "Kettlebell Push-Up Rows", "tip": "One hand on KB. Push-up, then row that KB to hip. Alternate sides. Core fights rotation." },
+      { "name": "Bodyweight Dips", "tip": "Full range of motion. Lean slightly forward for chest focus, upright for triceps." },
+      { "name": "Deficit Push-Ups", "tip": "Hands on elevated objects (books, plates). Allows deeper range of motion. Tougher than it sounds." },
+      { "name": "Kettlebell Clean to Press", "tip": "One fluid movement: swing up to rack position, then press overhead. Explosive and technical." },
+      { "name": "Tension Push-Ups", "tip": "Hold at the bottom 5–30 seconds OR lower for 4–8 seconds and press up fast. Brutal." },
+      { "name": "Dumbbell Lateral Raises", "tip": "Slight bend in elbows, raise to shoulder height. Slow and controlled beats heavy and sloppy." },
+      { "name": "Upright Row", "tip": "Pull KB or dumbbell up close to your body, elbows flare out above hands." }
+    ],
+    "4": [
+      { "name": "Weighted Explosive Push-Ups", "tip": "Add a weighted vest to any Phase 3 push-up variation for increased resistance." },
+      { "name": "Weighted Dips", "tip": "Attach weight via a dip belt, weighted vest, or hold a KB between your legs." },
+      { "name": "Weighted Archer Push-Ups", "tip": "Wear a weighted vest. Each rep is far more demanding on the working arm." }
+    ]
+  },
+  "Legs": {
+    "1": [
+      { "name": "Bodyweight Squats", "tip": "Feet shoulder-width apart. Sit back and down, chest up. Knee tracks over second toe." },
+      { "name": "Reverse Lunges", "tip": "Step back, not forward. More knee-friendly. Lower back knee toward the floor." },
+      { "name": "Glute Bridges", "tip": "Lie on back, feet flat. Drive hips up, squeeze glutes hard at the top. Hold 1 second." },
+      { "name": "Step-Ups", "tip": "Use a sturdy chair or small step. Drive through the front heel. Keep torso upright." },
+      { "name": "Calf Raises", "tip": "Use a wall for balance if needed. Full range: from heel drop to full tiptoe extension." }
+    ],
+    "2": [
+      { "name": "Goblet Squat (Kettlebell)", "tip": "Hold KB at chest height. Sit deep into the squat, elbows track inside knees at bottom." },
+      { "name": "Walking Lunges", "tip": "Step forward, lower the back knee. Push off the front foot to step through. Weight optional." },
+      { "name": "Single-Leg Glute Bridge", "tip": "One foot on the floor, the other extended. Drive hips up. Harder than it looks!" },
+      { "name": "Bulgarian Split Squats", "tip": "<strong>Rear foot on a chair.</strong> Lower the back knee toward the floor. Front shin stays vertical." },
+      { "name": "Jump Squats", "tip": "Squat down to parallel, then explode up. Land softly with bent knees to absorb impact." },
+      { "name": "Jump Lunges", "tip": "Lunge down, jump and switch legs mid-air. Stay light on the landing." },
+      { "name": "Kettlebell Swings", "tip": "Hip hinge, not a squat. Drive the KB with your hips. Keep back flat throughout." },
+      { "name": "Around the World Reverse Lunges", "tip": "Step back, then side, then across in one sequence per leg. Great hip mobility work." },
+      { "name": "Hamstring Curls", "tip": "Lie prone, anchor feet under something heavy, and curl your heels toward your glutes." }
+    ],
+    "3": [
+      { "name": "Pistol Squat Progressions", "tip": "Start with box-assisted or holding a support. One leg straight out in front, lower on the other." },
+      { "name": "Kettlebell Swings (Heavy)", "tip": "Go heavier. Explosive hip snap. The KB should feel weightless at the top." },
+      { "name": "Weighted Step-Ups", "tip": "Hold a KB in each hand or wear a backpack. Drive through the heel of the working leg." },
+      { "name": "Romanian Deadlifts (RDL)", "tip": "KB or weight, hinge at hips, back flat. Feel the hamstring stretch, drive hips forward to stand." },
+      { "name": "Static Lunges with KB Pass-Through", "tip": "In a lunge, pass the KB under your front leg. Challenges balance and coordination." },
+      { "name": "Glute Bridges (Weighted)", "tip": "KB on hips. Drive hard. Control the descent. Heavier weight, higher the challenge." },
+      { "name": "KB Overhead Squats", "tip": "Press KB overhead, keep it locked, then squat deep. Demands shoulder mobility and core stability." },
+      { "name": "Bulgarian Split Squats (Weighted)", "tip": "Add a KB or two. More load, more burn. Keep front shin vertical and chest up." },
+      { "name": "Front Rack Squats", "tip": "KB in front rack position (forearm vertical, elbow high). Deep squat. Upright torso is key." }
+    ],
+    "4": [
+      { "name": "Weighted Pistol Squats", "tip": "Hold a KB while performing a pistol squat. Extreme single-leg strength." },
+      { "name": "Weighted Jump Squats", "tip": "Add a light KB or vest. Absorb carefully on landing." }
+    ]
+  },
+  "Abs": {
+    "1": [
+      { "name": "Dead Bugs", "tip": "Press lower back into the floor. Extend opposite arm and leg slowly. Control your breathing." },
+      { "name": "Crunches", "tip": "Focus on contracting the abs, not pulling your neck. Short range of motion done right beats big swings done wrong." },
+      { "name": "Leg Raises (Floor)", "tip": "Hands under hips. Lower legs slowly toward the ground without touching. Keep low back pressed down." },
+      { "name": "Plank (20–30 sec)", "tip": "Forearms or hands. Straight line from head to heels. Squeeze everything: abs, glutes, thighs." },
+      { "name": "Penguins", "tip": "Lie on back, knees bent. Slide hands toward each ankle alternating side to side. Oblique focus." }
+    ],
+    "2": [
+      { "name": "V-Ups", "tip": "Legs and torso rise simultaneously to a V shape. Reach for your toes. Lower slowly." },
+      { "name": "Hanging Knee Raises", "tip": "From a bar, bring knees to chest. Control the swing. Squeeze abs at the top." },
+      { "name": "Side Planks (30–40 sec)", "tip": "Stack feet or stagger them. Keep hips up. Don't let them sag toward the floor." },
+      { "name": "Russian Twists (KB optional)", "tip": "Lean back 45°, feet up. Rotate side to side. Add a KB for more resistance." },
+      { "name": "Kettlebell Marches", "tip": "Hold a KB overhead, march in place with high knees. Core fights to stay stable and upright." },
+      { "name": "Plank Shoulder Taps", "tip": "In push-up plank, tap each shoulder alternately. Hips stay square — no rocking." },
+      { "name": "Mountain Climbers", "tip": "Drive knees to chest alternating as fast as you can maintain form. Great cardio + core combo." },
+      { "name": "Hollow Hold", "tip": "Press lower back to floor, arms and legs extended and hovering. Brutal for the entire core." }
+    ],
+    "3": [
+      { "name": "Hanging Leg Raises (Full)", "tip": "Straight legs from a dead hang to parallel or beyond. Requires serious control." },
+      { "name": "Toe-to-Bar Progressions", "tip": "Work from knee raises → L-raise → toe-to-bar. Build the compression strength progressively." },
+      { "name": "Plank Walk-Outs", "tip": "From standing, walk hands out to full plank, then walk back. Demands shoulder and core stability." },
+      { "name": "KB Sit-Up to Press", "tip": "Hold KB at chest, sit up and press overhead at the top. Controlled on the descent." },
+      { "name": "Weighted Hollow Hold", "tip": "Hold a light KB or weight plate in the hollow position. Even 5 extra seconds is brutal." },
+      { "name": "Halos (Kettlebell)", "tip": "Hold KB by horns, circle around your head. Keep elbows close. Move slowly, feel the shoulder and core work." },
+      { "name": "Half Kneeling Chop", "tip": "One knee down, rotate KB from high to low across the body. Anti-rotation for obliques." },
+      { "name": "Ab Slide / Roll-Outs", "tip": "From knees, roll out to full extension (arms straight), pull back in. One of the hardest ab exercises." }
+    ],
+    "4": [
+      { "name": "Weighted Hanging Leg Raises", "tip": "Add ankle weights. The increased lever arm makes this extremely challenging." },
+      { "name": "Weighted Ab Roll-Outs", "tip": "Wear a weighted vest while rolling out. Near-planche level core demand." }
+    ]
+  },
+  "Back": {
+    "1": [
+      { "name": "Supermans", "tip": "Lie face down, arms extended. Lift arms, chest and legs simultaneously. Hold at the top." },
+      { "name": "Backpack Bent-Over Rows", "tip": "Hinge at hips, back flat. Pull backpack toward lower chest. Squeeze shoulder blades together." },
+      { "name": "Reverse Snow Angels", "tip": "Lie face down, arms at sides. Sweep arms up overhead and back. Focuses on upper back and rear delts." },
+      { "name": "Doorway Isometric Pulls", "tip": "Stand in doorway, grip the frame, lean back and pull. Isometric contraction — no movement, all tension." },
+      { "name": "Band-Assisted Pull-Up Negatives", "tip": "Use a resistance band for support. Jump to the top and lower yourself as slowly as possible." }
+    ],
+    "2": [
+      { "name": "Single-Arm KB Rows", "tip": "One knee and hand on a surface for support. Pull KB to hip height. Big range, controlled negative." },
+      { "name": "Hip Hinge / Good Mornings", "tip": "Hinge from hips, back stays flat. Hamstrings and lower back. Feel the stretch, not the strain." },
+      { "name": "Back Extensions", "tip": "Over the edge of a couch or bench. Lower torso down and raise back up. Lower back and glutes." },
+      { "name": "Pull-Ups", "tip": "Overhand grip. Full dead hang at bottom, chin over bar at top. No kipping — strict form." },
+      { "name": "Chin-Ups", "tip": "Underhand grip, more bicep involvement. Same strict movement as pull-ups." },
+      { "name": "Inverted Doorway Rows", "tip": "Hook a towel around a sturdy handle or use rings. Lean back and row your body up. Scaleable." },
+      { "name": "Upright Rows", "tip": "Pull KB or barbell up close to body, elbows flare high. Upper traps and rear delts." }
+    ],
+    "3": [
+      { "name": "Kettlebell Renegade Rows", "tip": "Push-up position with both hands on KBs. Row one arm at a time. Core fights rotation." },
+      { "name": "Kettlebell Gorilla Rows", "tip": "Straddle two KBs on the floor. Alternate rows. Heavier load, explosive pull." },
+      { "name": "Explosive Hip Hinges (KB)", "tip": "Drive the KB through the hips with power. Think of it as throwing your hips forward — not squatting." },
+      { "name": "Weighted Supermans", "tip": "Hold a light KB overhead as you perform supermans. Back extensors work overtime." },
+      { "name": "Weighted Vest Pull-Ups", "tip": "Standard pull-ups with added load. Every pound counts when you're hanging." },
+      { "name": "Inverted Rows (Feet Elevated)", "tip": "Feet up on a chair while doing inverted rows. Body nearly horizontal — very challenging." },
+      { "name": "Archer Pull-Ups", "tip": "Wide grip, pull toward one hand while the other arm stays extended. Extreme lat isolation." }
+    ],
+    "4": [
+      { "name": "Weighted Renegade Rows", "tip": "Use heavier KBs. The stability demand on the core increases with weight." },
+      { "name": "Weighted Vest Chin-Ups", "tip": "Add load to your chin-up. The bicep and lat combination becomes extremely demanding." }
+    ]
+  }
+}

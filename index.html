@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DailyReps — Workout Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <div class="header-brand">DailyReps</div>
+      <div class="header-sub">20 min. workout tracker</div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-view="home"    onclick="showView('home')">Workout</button>
+      <button class="nav-tab"        data-view="history" onclick="showView('history')">History</button>
+    </nav>
+  </header>
+
+  <!-- HOME VIEW -->
+  <div id="view-home" class="view active">
+
+    <!-- ══ SETUP PANEL ══ -->
+    <div id="setup-panel">
+
+      <!-- Week strip — only shown during setup -->
+      <div class="week-strip" id="week-strip"></div>
+
+      <div class="glass setup-panel-inner">
+        <div class="setup-title">New Workout</div>
+        <div class="setup-subtitle">Choose your focus, difficulty, sets, and rest time.</div>
+
+        <div class="setup-group">
+          <div class="setup-section-label">Body Part Focus</div>
+          <div class="pill-group" id="bodypart-pills"></div>
+        </div>
+
+        <div class="setup-group">
+          <div class="setup-section-label">Phase / Level</div>
+          <div class="pill-group" id="phase-pills">
+            <div class="pill" data-phase="1" onclick="selectPhase(this)">Phase 1 — Beginner</div>
+            <div class="pill" data-phase="2" onclick="selectPhase(this)">Phase 2 — Intermediate</div>
+            <div class="pill" data-phase="3" onclick="selectPhase(this)">Phase 3 — Advanced</div>
+            <div class="pill" data-phase="4" onclick="selectPhase(this)">Phase 4 — Pro</div>
+          </div>
+        </div>
+
+        <div class="setup-group" id="exercise-select-group" style="display:none;">
+          <div class="setup-section-label">
+            Select Exercises
+            <span id="ex-count-label" style="color:var(--text-dim);">(pick 1 or more)</span>
+          </div>
+          <div class="exercise-list" id="exercise-list"></div>
+        </div>
+
+        <!-- Sets + Rest side by side -->
+        <div class="setup-row-pair">
+          <div class="stepper-card">
+            <div class="stepper-card-label">Sets</div>
+            <div class="stepper-card-sub">per exercise</div>
+            <div class="stepper">
+              <button class="stepper-btn" id="sets-dec" onclick="changeSets(-1)">−</button>
+              <span class="stepper-value" id="sets-value">3</span>
+              <button class="stepper-btn" id="sets-inc" onclick="changeSets(1)">+</button>
+            </div>
+          </div>
+          <div class="stepper-card">
+            <div class="stepper-card-label">Rest</div>
+            <div class="stepper-card-sub">seconds between sets</div>
+            <div class="stepper">
+              <button class="stepper-btn" id="rest-dec" onclick="changeRest(-15)">−</button>
+              <span class="stepper-value" id="rest-value">30</span>
+              <button class="stepper-btn" id="rest-inc" onclick="changeRest(15)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-start" id="btn-start" onclick="startWorkout()" disabled>
+          Start Workout
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ WORKOUT PANEL ══ -->
+    <div id="workout-panel" style="display:none;">
+
+      <!-- Top bar: title + end button -->
+      <div class="workout-topbar">
+        <div class="workout-topbar-title" id="workout-title">Workout</div>
+        <button class="btn-end-workout" onclick="confirmEndWorkout()">End</button>
+      </div>
+
+      <!-- BIG TIMER -->
+      <div class="timer-block">
+        <div class="timer-ring-wrap">
+          <svg class="timer-ring-svg" viewBox="0 0 200 200">
+            <circle class="timer-track" cx="100" cy="100" r="88"/>
+            <circle class="timer-fill"  cx="100" cy="100" r="88" id="timer-fill"/>
+          </svg>
+          <div class="timer-center">
+            <div class="timer-display" id="timer-display">0:00</div>
+            <div class="timer-label">elapsed</div>
+          </div>
+        </div>
+
+        <!-- Set progress dots below ring -->
+        <div class="set-progress">
+          <div class="set-progress-label" id="set-progress-label"></div>
+          <div class="set-dots" id="set-dots"></div>
+        </div>
+      </div>
+
+      <!-- Current exercise -->
+      <div class="current-exercise-block glass-strong">
+        <div class="current-ex-round" id="current-ex-round"></div>
+        <div class="current-ex-name"  id="current-ex-name"></div>
+        <div class="current-ex-tip"   id="current-ex-tip"></div>
+      </div>
+
+      <!-- Queue -->
+      <div class="queue-section">
+        <div class="queue-label">Queue</div>
+        <div class="queue-list" id="queue-list"></div>
+      </div>
+
+      <!-- Done button -->
+      <button class="btn-done" id="btn-done" onclick="markDone()">Done — Next →</button>
+
+    </div>
+
+    <!-- ══ COMPLETE PANEL ══ -->
+    <div id="complete-panel" style="display:none;">
+      <div class="glass complete-panel-inner">
+        <div class="complete-trophy">🏆</div>
+        <div class="complete-title">Workout Complete!</div>
+        <div class="complete-sub" id="complete-sub"></div>
+        <div class="complete-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="stat-time">—</div>
+            <div class="stat-label">Time</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="stat-exercises">—</div>
+            <div class="stat-label">Exercises</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="stat-sets">—</div>
+            <div class="stat-label">Sets each</div>
+          </div>
+        </div>
+        <button class="btn-new-workout" onclick="resetToSetup()">Start Another Workout</button>
+      </div>
+    </div>
+
+  </div><!-- /view-home -->
+
+  <!-- HISTORY VIEW -->
+  <div id="view-history" class="view">
+    <div class="history-header">
+      <div class="history-title">Workout History</div>
+      <div class="history-sub">Track your consistency week by week.</div>
+    </div>
+    <div class="week-selector">
+      <button class="week-nav" onclick="changeWeekOffset(-1)">← Older</button>
+      <div class="week-label" id="history-week-label"></div>
+      <button class="week-nav" onclick="changeWeekOffset(1)">Newer →</button>
+    </div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ══ REST COUNTDOWN OVERLAY ══ -->
+<div class="overlay" id="rest-overlay" style="display:none;">
+  <div class="rest-overlay-inner">
+    <div class="rest-label">Rest</div>
+    <div class="rest-ring-wrap">
+      <svg class="rest-ring-svg" viewBox="0 0 160 160">
+        <circle class="rest-track" cx="80" cy="80" r="68"/>
+        <circle class="rest-fill"  cx="80" cy="80" r="68" id="rest-fill"/>
+      </svg>
+      <div class="rest-countdown" id="rest-countdown">30</div>
+    </div>
+    <div class="rest-next-label" id="rest-next-label"></div>
+    <button class="rest-skip-btn" onclick="skipRest()">Skip Rest →</button>
+  </div>
+</div>
+
+<!-- ══ WORKOUT COMPLETE CELEBRATION OVERLAY ══ -->
+<div class="overlay" id="celebration-overlay" style="display:none;">
+  <div class="celebration-inner">
+    <div class="celebration-burst" id="celebration-burst">
+      <span>✦</span><span>✦</span><span>✦</span><span>✦</span>
+      <span>✦</span><span>✦</span><span>✦</span><span>✦</span>
+    </div>
+    <div class="celebration-check">
+      <svg viewBox="0 0 100 100" class="cel-svg">
+        <circle class="cel-circle" cx="50" cy="50" r="44"/>
+        <polyline class="cel-tick" points="28,50 42,64 72,34"/>
+      </svg>
+    </div>
+    <div class="celebration-title">Well Done!</div>
+    <div class="celebration-sub" id="celebration-sub"></div>
+    <div class="celebration-stats" id="celebration-stats"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -31,6 +31,9 @@ let currentSlotIdx = 0;
 let workoutInterval = null;
 let workoutSeconds  = 0;
 
+// Wake lock — keeps screen on during workout
+let wakeLock = null;
+
 // Rest timer
 let restInterval    = null;
 let restRemaining   = 0;
@@ -38,6 +41,46 @@ let restCallback    = null;   // called when rest ends
 
 // History view
 let historyWeekOffset = 0;
+
+/* ════════════════════════════════════════════════════════════
+   WAKE LOCK — keeps the screen on during a workout
+   ─────────────────────────────────────────────────────────────
+   The Wake Lock API is supported on:
+     • Chrome / Edge on Android (v84+)
+     • Safari on iOS (v16.4+)
+   On unsupported browsers it fails silently — the workout still
+   works, the screen may just time out as normal.
+
+   The lock is released automatically by the OS whenever the page
+   goes into the background. The visibilitychange listener below
+   reacquires it as soon as the user returns to the app — which
+   matters if they switch away briefly mid-workout.
+   ════════════════════════════════════════════════════════════ */
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) return; // not supported — fail silently
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => { wakeLock = null; });
+  } catch (err) {
+    // Permission denied or other error — not fatal
+    console.warn('Wake lock could not be acquired:', err.message);
+  }
+}
+
+async function releaseWakeLock() {
+  if (wakeLock) {
+    await wakeLock.release();
+    wakeLock = null;
+  }
+}
+
+// Reacquire the lock automatically when the user comes back to the app
+// mid-workout (the OS releases it whenever the page goes to background)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && workoutInterval !== null) {
+    await acquireWakeLock();
+  }
+});
 
 /* ════════════════════════════════════════════════════════════
    BOOT
@@ -87,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
    ════════════════════════════════════════════════════════════ */
 
 const SUPABASE_URL      = 'https://bvwndtboqgybhcvzhfln.supabase.co';   // ← replace
-const SUPABASE_ANON_KEY = 'sb_publishable_PlPqkfU7J2HvGJsmEqHiGg_QGhGsEzl';                    // ← replace
+const SUPABASE_ANON_KEY = 'sb_publishable_PlPqkfU7J2HvGJsmEqHiGg_QGhGsEzl';   // ← replace
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -317,6 +360,7 @@ function startWorkout() {
   renderQueue();
   showSlot(0);
   startWorkoutTimer();
+  acquireWakeLock(); // keep screen on for the duration of the workout
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -430,7 +474,11 @@ function tickWorkoutTimer() {
   fill.style.stroke = progress < 0.5 ? '#00c6a2' : progress < 0.85 ? '#6c63ff' : '#ff5c7c';
 }
 
-function stopWorkoutTimer() { clearInterval(workoutInterval); workoutInterval = null; }
+function stopWorkoutTimer() {
+  clearInterval(workoutInterval);
+  workoutInterval = null;
+  releaseWakeLock(); // screen can sleep again
+}
 
 /* ════════════════════════════════════════════════════════════
    REST TIMER

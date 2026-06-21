@@ -183,6 +183,7 @@ async function getPartsThisWeek()       { return (await getCurrentWeekWorkouts()
 async function renderWeekStrip() {
   const strip = document.getElementById('week-strip');
   const ww    = await getCurrentWeekWorkouts();
+  const done  = ww.map(w => w.bodyPart);
   strip.innerHTML = BODY_PARTS.map(part => {
     const isDone = done.includes(part);
     const count  = ww.filter(w => w.bodyPart === part).length;
